@@ -8,50 +8,71 @@ const Form = () => {
   const [errorPassword, setErrorPassword] = useState("");
   function handelChangeFname(e) {
     setFname(e.target.value);
+    if (errorFname) setErrorFname("");
   }
   const [age, setAge] = useState("");
   function handelChangeAge(e) {
     setAge(e.target.value);
+    if (errorAge) setErrorAge("");
   }
   const [password, setPassword] = useState("");
   function handelChangePassword(e) {
     setPassword(e.target.value);
+    if (errorPassword) setErrorPassword("");
   }
   function handelSubmit(e) {
-    //fname:
-    if (fname === "" && fname.length < 3) {
-      setErrorFname("First name can't be empety or less then 3");
-      return;
-    }
-
-    //age:
-    if (age === " " && Number(age) < 18) {
-      setErrorAge("Age can't be empty or less then 18");
-      return;
-    } 
-
-    //password:
-    if (password === "") {
-      setErrorPassword("Password can't be empty!");
-      return;
-    } else if (password.length < 8) {
-      setErrorPassword("Password can't be less then 8!");
-      return;
-    } else if (/\d/.test(password)) {
-      setErrorPassword("Password can't be Numbers!");
-      return;
-    } else if (!/[a-z]/.test(password)) {
-      setErrorPassword("Password must have unless one of big caracter!");
-      return;
-    } else if (!/[A-Z]/.test(password)) {
-      setErrorPassword("Password must have unless one of small caracter!");
-      return;
-    } else if (!/[!@#$%^&*]/.test(password)) {
-      setErrorPassword(
-        "Password must have unless one of this->[!@#$%^&*] caracters!",
+    e.preventDefault();
+    // first name validation
+    if (fname.trim() === "" || fname.trim().length < 3) {
+      setErrorFname(
+        "First name can't be empty and must be at least 3 characters",
       );
       return;
     }
+
+    // age validation:
+    if (age === "" || Number(age) < 18 ) {
+      setErrorAge("Age can't be empty and must be a number >= 18");
+      return;
+    }
+
+    //password validation:
+    if (password === "") {
+      setErrorPassword("Password can't be empty!");
+      return;
+    }
+    if (password.length < 8) {
+      setErrorPassword("Password must be at least 8 characters!");
+      return;
+    }
+    if (!/\d/.test(password)) {
+      setErrorPassword("Password must contain at least one number!");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setErrorPassword("Password must contain at least one lowercase letter!");
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setErrorPassword("Password must contain at least one uppercase letter!");
+      return;
+    }
+    if (!/[!@#$%^&*]/.test(password)) {
+      setErrorPassword(
+        "Password must contain at least one special character (!@#$%^&*)!",
+      );
+      return;
+    }
+    
+    setErrorFname("");
+    setErrorAge("");
+    setErrorPassword("");
+    alert("Good job");
+
+    // clear form fields
+    setFname("");
+    setAge("");
+    setPassword("");
   }
 
   return (
@@ -69,6 +90,7 @@ const Form = () => {
             type="text"
             id="Fname"
             name="Fname"
+            value={fname}
             className="w-full rounded border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             onChange={handelChangeFname}
           />
@@ -82,6 +104,7 @@ const Form = () => {
             type="number"
             id="Age"
             name="Age"
+            value={age}
             className="w-full rounded border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             onChange={handelChangeAge}
           />
@@ -98,6 +121,7 @@ const Form = () => {
             type="password"
             id="password"
             name="password"
+            value={password}
             className="w-full rounded border border-slate-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
             onChange={handelChangePassword}
           />
